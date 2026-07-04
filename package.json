@@ -1,0 +1,54 @@
+{
+  "name": "familiar-letta",
+  "version": "0.1.0",
+  "description": "A beautiful chat client for your Letta agent. Bring your own key. Deploys to your own Cloudflare account.",
+  "type": "module",
+  "bin": {
+    "familiar": "cli/index.js"
+  },
+  "files": [
+    "cli/",
+    "bridge/src/",
+    "bridge/package.json",
+    "bridge/wrangler.toml",
+    "bridge/schema.sql",
+    "bridge/tsconfig.json",
+    "app/src/",
+    "app/public/",
+    "app/index.html",
+    "app/package.json",
+    "app/package-lock.json",
+    "app/tsconfig.json",
+    "app/tsconfig.node.json",
+    "app/vite.config.ts",
+    "app/.env.example"
+  ],
+  "scripts": {
+    "dev:app": "cd app && npm run dev",
+    "dev:bridge": "cd bridge && npm run dev",
+    "build:app": "cd app && npm run build",
+    "deploy:bridge": "cd bridge && npm run deploy"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martusha89/Letta-Familiar.git"
+  },
+  "homepage": "https://github.com/martusha89/Letta-Familiar#readme",
+  "bugs": {
+    "url": "https://github.com/martusha89/Letta-Familiar/issues"
+  },
+  "keywords": [
+    "letta",
+    "ai",
+    "companion",
+    "chat",
+    "memgpt",
+    "mcp",
+    "cloudflare"
+  ],
+  "author": "Marta Varen",
+  "license": "MIT"
+}
