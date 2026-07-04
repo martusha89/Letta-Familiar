@@ -317,13 +317,23 @@ async function handleGetAudioFile(env: Env, audioId: string): Promise<Response> 
 // (api/v1/{app_key}/...), so the bridge keeps it server-side and never exposes
 // it to the browser.
 
+// Built-in KLIPY app key so GIFs work out of the box. KLIPY app keys are meant
+// to ship inside apps (partner model, same as Giphy/Tenor keys in messaging
+// apps); rate limiting is per customer_id, which we pass per agent. A user's
+// own key in Settings → GIFs overrides this for their bridge.
+export const DEFAULT_KLIPY_API_KEY = "qxNoei7dKXeSjAOQ72ClLdtnsfm4OAW8t375Q77rZ6jrdzbZguWHyubioK77Vhsu";
+
+function effectiveKlipyKey(row: { klipy_api_key: string | null }): string {
+  return row.klipy_api_key || DEFAULT_KLIPY_API_KEY;
+}
+
 async function handleGetKlipy(request: Request, env: Env, agentId: string): Promise<Response> {
   const token = request.headers.get("X-Familiar-Token") ?? "";
   const row = await db.getStateByAgent(env, agentId);
   if (!row || row.client_token !== token) {
     return jsonResponse({ error: "unauthorized" }, 401);
   }
-  return jsonResponse({ has_key: Boolean(row.klipy_api_key) });
+  return jsonResponse({ has_key: Boolean(row.klipy_api_key), builtin: !row.klipy_api_key });
 }
 
 async function handlePostKlipy(request: Request, env: Env, agentId: string): Promise<Response> {
@@ -419,17 +429,11 @@ async function handleGifSearch(request: Request, env: Env, agentId: string): Pro
   if (!row || row.client_token !== token) {
     return jsonResponse({ error: "unauthorized" }, 401);
   }
-  if (!row.klipy_api_key) {
-    return jsonResponse(
-      { error: "klipy_not_configured", message: "Add a KLIPY API key in Settings → GIFs." },
-      400,
-    );
-  }
   // Empty q is allowed — searchKlipy falls back to trending so the picker
   // opens populated.
   const q = new URL(request.url).searchParams.get("q") ?? "";
   try {
-    const results = await searchKlipy(row.klipy_api_key, agentId, q, 24);
+    const results = await searchKlipy(effectiveKlipyKey(row), agentId, q, 24);
     return jsonResponse({ results });
   } catch (err) {
     return jsonResponse(

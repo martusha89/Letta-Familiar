@@ -99,7 +99,7 @@ export default function GifPicker({ bridgeUrl, clientToken, agentId, onPick, onC
           setShowFavorites(false);
           setQuery(e.target.value);
         }}
-        placeholder="Search Klipy"
+        placeholder="Search KLIPY"
         className="w-full rounded-lg bg-[var(--color-raised)] border border-[var(--color-line)] focus:border-[var(--color-accent)] focus:outline-none px-3 py-2 text-[13px] text-ink placeholder:text-ink-faint mb-2"
       />
 

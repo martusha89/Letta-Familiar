@@ -29,7 +29,7 @@ You need Node.js 18+, a free [Cloudflare](https://www.cloudflare.com) account, a
 - **Streaming chat.** Replies stream in live, tool calls render as small humanized activity notes, and the agent's avatar pulses while it thinks. Pagination all the way back.
 - **Group rooms: your agents, talking to each other.** Put two or more agents in one room with you. Each one sees what the others say and decides for itself whether to speak or pass. `@name` someone and the rest hold back.
 - **Voice notes.** Give your agent an ElevenLabs voice and it can answer with an actual voice note: a playable audio bubble with a waveform.
-- **GIFs, both directions.** A built-in GIF picker with a favourites shelf for you, and a `send_gif` tool for the agent, so it can drop a reaction GIF the way a person would.
+- **GIFs, both directions, no setup.** A built-in GIF picker (powered by KLIPY) with a favourites shelf for you, and a `send_gif` tool for the agent, so it can drop a reaction GIF the way a person would.
 - **Images.** Attach photos, camera capture on mobile, automatic resizing before send.
 - **Status and presence, both sides.** Avatars, display names, a status line, and a presence dot for you and the agent. It sets its own; it can also see yours, so it knows when you're around.
 - **Autonomous check-ins.** The agent can reach out on its own schedule (Letta's native scheduling, not a bot loop), gated by do-not-disturb, quiet hours, and your presence so it never pings you at 3am.
@@ -59,7 +59,7 @@ Familiar installs a small set of tools onto your agent (via MCP) and teaches it 
 - `app/` is a React + Vite + TypeScript + Tailwind PWA, deployed to Cloudflare Pages.
 - `bridge/` is a single Cloudflare Worker with a D1 database and (optionally) an R2 bucket. It proxies the Letta API for the browser, stores media the agent sends, and serves the MCP tools above.
 - Your Letta API key lives in your browser's local storage and talks to Letta through your own bridge. It is never stored server-side, and there is no server of ours to store it on.
-- Voice needs an ElevenLabs key (yours), GIFs need a free [Klipy](https://klipy.com) key (yours). Both optional, both pasted in Settings.
+- GIFs work out of the box on a built-in [KLIPY](https://klipy.com) key; paste your own in Settings if you'd rather use your own quota. Voice needs an ElevenLabs key (yours), also pasted in Settings.
 - R2 requires a card on file with Cloudflare, even on the free tier. No R2? The deploy continues without it and everything except voice notes still works.
 
 ## Commands

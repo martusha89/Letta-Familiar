@@ -205,7 +205,7 @@ export default function SettingsPage({
           {/* GIFs (KLIPY) */}
           <Section
             title="GIFs"
-            subtitle="Optional. Powers the GIF picker in the composer via KLIPY."
+            subtitle="GIFs work out of the box via KLIPY. Add your own key to use your own quota."
           >
             <KlipyConfigPanel session={session} />
           </Section>
@@ -639,7 +639,7 @@ function KlipyConfigPanel({ session }: { session: Session }) {
 
   async function clearKey() {
     if (!session.agentId || !session.clientToken) return;
-    if (!window.confirm("Remove your KLIPY key? GIF search will stop working.")) return;
+    if (!window.confirm("Remove your KLIPY key? GIFs will fall back to Familiar's built-in key.")) return;
     setSaving(true);
     setError(null);
     try {
@@ -660,11 +660,11 @@ function KlipyConfigPanel({ session }: { session: Session }) {
 
   return (
     <div className="space-y-2.5">
-      <SubSection label="KLIPY API key" caption={hasKey ? "configured" : "not configured"}>
+      <SubSection label="KLIPY API key" caption={hasKey ? "your key" : "using built-in key"}>
         {!editing ? (
           <div className="flex items-center gap-2">
             <span className="flex-1 rounded-lg bg-[var(--color-raised)] border border-[var(--color-line)] px-3 py-2 text-[13px] font-mono text-ink-muted">
-              {hasKey ? "••••••••••••••••" : "—"}
+              {hasKey ? "••••••••••••••••" : "built-in"}
             </span>
             <button
               onClick={() => {
@@ -715,7 +715,8 @@ function KlipyConfigPanel({ session }: { session: Session }) {
         )}
       </SubSection>
       <p className="text-[11px] text-ink-faint leading-relaxed">
-        Get a free key at{" "}
+        GIFs work out of the box on Familiar's built-in KLIPY key. If you'd rather use your own
+        quota, get a free key at{" "}
         <a
           href="https://klipy.com/developers"
           target="_blank"
@@ -724,8 +725,7 @@ function KlipyConfigPanel({ session }: { session: Session }) {
         >
           klipy.com → Partner Panel → API Keys
         </a>
-        . Testing keys allow 100 requests/min; request Production access for unlimited.
-        (Tenor's GIF API shut down to new clients in Jan 2026 — KLIPY is the successor.)
+        {" "}and paste it here.
       </p>
       {error && (
         <p className="text-[11px] text-red-300 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-md">

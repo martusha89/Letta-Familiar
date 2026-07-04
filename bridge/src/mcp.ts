@@ -14,7 +14,7 @@
 
 import type { Env } from "./index";
 import * as db from "./db";
-import { corsHeaders, jsonResponse, searchKlipy } from "./index";
+import { corsHeaders, jsonResponse, searchKlipy, DEFAULT_KLIPY_API_KEY } from "./index";
 
 interface JsonRpcRequest {
   jsonrpc: "2.0";
@@ -287,14 +287,11 @@ async function callTool(
       const caption = typeof args.caption === "string" ? args.caption.trim() : "";
       if (!query) throw new Error("query is required");
       const row = await db.getStateByAgent(env, agentId);
-      if (!row?.klipy_api_key) {
-        throw new Error(
-          "GIFs aren't set up. The user can add a free KLIPY API key in Settings → GIFs.",
-        );
-      }
+      if (!row) throw new Error("agent not initialized");
+      const klipyKey = row.klipy_api_key || DEFAULT_KLIPY_API_KEY;
       let hits;
       try {
-        hits = await searchKlipy(row.klipy_api_key, agentId, query, 10);
+        hits = await searchKlipy(klipyKey, agentId, query, 10);
       } catch (err) {
         throw new Error(`GIF search failed: ${err instanceof Error ? err.message : String(err)}`);
       }
